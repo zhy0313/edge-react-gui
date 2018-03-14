@@ -1,6 +1,6 @@
 // @flow
 
-import type { AbcAccount, AbcCurrencyWallet } from 'edge-core-js'
+import type { AbcAccount, AbcCurrencyWallet, EdgeReceiveAddress } from 'edge-core-js'
 import { Platform } from 'react-native'
 import Locale from 'react-native-locale'
 import PushNotification from 'react-native-push-notification'
@@ -44,7 +44,7 @@ export const initializeAccount = (account: AbcAccount, touchIdInfo: Object) => a
     walletId: '',
     currencyCode: '',
     currencyPlugins: [],
-    otpInfo: {enabled: account.otpEnabled, otpKey: account.otpKey, otpResetPending},
+    otpInfo: { enabled: account.otpEnabled, otpKey: account.otpKey, otpResetPending },
     autoLogoutTimeInSeconds: '',
     bluetoothMode: '',
     pinLoginEnabled: false,
@@ -90,7 +90,14 @@ export const initializeAccount = (account: AbcAccount, touchIdInfo: Object) => a
       accountInitObject.walletId = walletId
       accountInitObject.currencyCode = currencyCode
     }
-    const { activeWalletIds, archivedWalletIds, currencyWallets } = account
+    const activeWalletIds = account.activeWalletIds
+    const archivedWalletIds = account.archivedWalletIds
+    const currencyWallets = account.currencyWallets
+
+    accountInitObject.activeWalletIds = activeWalletIds
+    accountInitObject.archivedWalletIds = archivedWalletIds
+    accountInitObject.currencyWallets = currencyWallets
+
     for (const walletId of Object.keys(currencyWallets)) {
       const abcWallet: AbcCurrencyWallet = currencyWallets[walletId]
       if (abcWallet.type === 'wallet:ethereum') {
@@ -100,9 +107,6 @@ export const initializeAccount = (account: AbcAccount, touchIdInfo: Object) => a
         }
       }
     }
-    accountInitObject.activeWalletIds = activeWalletIds
-    accountInitObject.archivedWalletIds = archivedWalletIds
-    accountInitObject.currencyWallets = currencyWallets
 
     const settings = await SETTINGS_API.getSyncedSettings(account)
     const syncDefaults = SETTINGS_API.SYNCED_ACCOUNT_DEFAULTS
@@ -135,7 +139,15 @@ export const initializeAccount = (account: AbcAccount, touchIdInfo: Object) => a
     const coreFinal = { ...coreDefaults, ...coreSettings }
     accountInitObject.pinMode = coreFinal.pinMode
     accountInitObject.otpMode = coreFinal.otpMode
-    dispatch(actions.dispatchActionObject(Constants.ACCOUNT_INIT_COMPLETE, accountInitObject))
+
+    const receiveAddresses = await getReceiveAddresses(currencyWallets)
+
+    dispatch(
+      actions.dispatchActionObject(Constants.ACCOUNT_INIT_COMPLETE, {
+        ...accountInitObject,
+        receiveAddresses
+      })
+    )
     // $FlowFixMe
     dispatch(updateWalletsRequest())
   } catch (e) {
@@ -174,3 +186,21 @@ export const logout = (username?: string) => ({
   type: Constants.LOGOUT,
   data: { username }
 })
+
+const getReceiveAddresses = (currencyWallets: { [id: string]: AbcCurrencyWallet }): Promise<{ [id: string]: EdgeReceiveAddress }> => {
+  const ids = Object.keys(currencyWallets)
+  const promises = ids.map(id => {
+    return currencyWallets[id].getReceiveAddress()
+  })
+  return Promise.all(promises).then(receiveAddresses => {
+    return ids.reduce(
+      (result, id, index) => {
+        return {
+          ...result,
+          [id]: receiveAddresses[index]
+        }
+      },
+      {}
+    )
+  })
+}
