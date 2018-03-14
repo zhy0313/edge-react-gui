@@ -317,8 +317,10 @@ function schema (wallet: AbcCurrencyWallet): GuiWallet {
     fiatCurrencyCode,
     denominations,
     allDenominations,
-    symbolImage,
-    symbolImageDarkMono,
+    symbols: {
+      symbolImage,
+      symbolImageDarkMono
+    },
     metaTokens,
     enabledTokens
   }

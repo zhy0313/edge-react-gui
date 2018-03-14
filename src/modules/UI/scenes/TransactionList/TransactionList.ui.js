@@ -240,7 +240,7 @@ export default class TransactionList extends Component<Props, State> {
         }
       }
     } else {
-      logo = uiWallet.symbolImage
+      logo = uiWallet.symbols.symbolImage
     }
 
     const cryptoAmount: string = UTILS.convertNativeToDisplay(displayDenomination.multiplier)(balanceInCrypto) // convert to correct denomination

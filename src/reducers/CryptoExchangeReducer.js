@@ -207,7 +207,7 @@ function getLogo (wallet, currencyCode) {
 }
 
 function getLogoDark (wallet, currencyCode) {
-  if (currencyCode === wallet.currencyCode) return wallet.symbolImageDarkMono
+  if (currencyCode === wallet.currencyCode) return wallet.symbols.symbolImageDarkMono
   for (let i = 0; i < wallet.metaTokens.length; i++) {
     const obj = wallet.metaTokens[i]
     if (obj.symbolImage && obj.currencyCode === currencyCode) {

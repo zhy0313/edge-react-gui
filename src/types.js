@@ -17,8 +17,10 @@ export type GuiWallet = {
   fiatCurrencyCode: string,
   denominations: Array<AbcDenomination>,
   allDenominations: { [currencyCode: string]: { [denomination: string]: AbcDenomination } },
-  symbolImage: string | void,
-  symbolImageDarkMono: string | void,
+  symbols: {
+    symbolImage: string | void,
+    symbolImageDarkMono: string | void,
+  },
   metaTokens: Array<AbcMetaToken>,
   enabledTokens: Array<string>
 }
@@ -177,8 +179,10 @@ export const emptyGuiWallet: GuiWallet = {
   fiatCurrencyCode: '',
   denominations: [],
   allDenominations: {},
-  symbolImage: '',
-  symbolImageDarkMono: '',
+  symbols: {
+    symbolImage: '',
+    symbolImageDarkMono: ''
+  },
   metaTokens: [],
   enabledTokens: []
 }

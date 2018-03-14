@@ -145,8 +145,8 @@ export class CreateWalletSelectCrypto extends Component<Props, State> {
           <View style={[styles.cryptoTypeInfoWrap]}>
             <View style={styles.cryptoTypeLeft}>
               <View style={[styles.cryptoTypeLogo]}>
-                {data.item.symbolImageDarkMono ? (
-                  <Image source={{ uri: data.item.symbolImageDarkMono }} style={[styles.cryptoTypeLogo, { borderRadius: 20 }]} />
+                {data.item.symbols.symbolImageDarkMono ? (
+                  <Image source={{ uri: data.item.symbols.symbolImageDarkMono }} style={[styles.cryptoTypeLogo, { borderRadius: 20 }]} />
                 ) : (
                   <View style={styles.cryptoTypeLogo} />
                 )}

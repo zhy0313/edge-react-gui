@@ -93,7 +93,7 @@ class FullWalletListRow extends Component<Props, State> {
     const id = walletData.id
     const name = walletData.name || s.strings.string_no_name
     const symbol = denomination.symbol
-    const symbolImageDarkMono = walletData.symbolImageDarkMono
+    const symbolImageDarkMono = walletData.symbols.symbolImageDarkMono
     const preliminaryCryptoAmount = truncateDecimals(bns.div(walletData.primaryNativeBalance, multiplier, DIVIDE_PRECISION), 6)
     const finalCryptoAmount = intl.formatNumber(decimalOrZero(preliminaryCryptoAmount, 6)) // check if infinitesimal (would display as zero), cut off trailing zeroes
 

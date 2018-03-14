@@ -27,7 +27,7 @@ class SortableWalletListRow extends Component<Props, State> {
       name = walletData.name || s.strings.string_no_name
       symbol = findDenominationSymbol(walletData.denominations, walletData.currencyCode)
       cryptoCurrencyName = walletData.currencyNames[walletData.currencyCode]
-      symbolImageDarkMono = walletData.symbolImageDarkMono
+      symbolImageDarkMono = walletData.symbols.symbolImageDarkMono
       preliminaryCryptoAmount = truncateDecimals(bns.div(walletData.primaryNativeBalance, multiplier, DIVIDE_PRECISION), 6)
       finalCryptoAmount = intl.formatNumberInput(decimalOrZero(preliminaryCryptoAmount, 6)) // make it show zero if infinitesimal number
     }

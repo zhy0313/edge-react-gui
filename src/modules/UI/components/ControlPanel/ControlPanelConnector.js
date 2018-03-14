@@ -21,7 +21,7 @@ const mapStateToProps = (state: State) => {
 
   if (guiWallet && currencyCode) {
     const isoFiatCurrencyCode = guiWallet.isoFiatCurrencyCode
-    currencyLogo = guiWallet.symbolImage
+    currencyLogo = guiWallet.symbols.symbolImage
     secondaryDisplayCurrencyCode = guiWallet.fiatCurrencyCode
     secondaryToPrimaryRatio = CORE_SELECTORS.getExchangeRate(state, currencyCode, isoFiatCurrencyCode)
     primaryDisplayDenomination = SETTINGS_SELECTORS.getDisplayDenominationFull(state, currencyCode)
